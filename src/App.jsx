@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  motion,
+  LazyMotion,
+  domAnimation,
+  m,
   MotionConfig,
   useReducedMotion,
   useScroll,
@@ -164,9 +166,12 @@ function Navbar() {
       <div className="shell relative flex items-center">
         <a href="#top" className="shrink-0" aria-label="Markaz IT International">
           <img
-            src={dark ? "/Logo1.png" : "/Logo.png"}
+            src={dark ? "/Logo1.webp" : "/Logo.webp"}
             alt="Markaz IT International"
             className="h-9 w-auto"
+            loading="eager"
+            width={144}
+            height={36}
           />
         </a>
 
@@ -253,7 +258,7 @@ function Hero() {
   // The only blue in the hero is the haze behind the product visual. Everything
   // else is flat white, so the atmosphere reads as light rather than a tint.
   return (
-    <motion.section
+    <m.section
       id="hero"
       className="relative overflow-hidden bg-surface"
       style={{ y }}
@@ -272,56 +277,56 @@ function Hero() {
 
       <MotionConfig reducedMotion="user">
         <div className="shell relative pb-28 pt-10 text-center md:pt-12">
-          <motion.div
+          <m.div
             initial="hidden"
             animate="show"
             variants={stagger(0.14)}
             className="mx-auto flex max-w-4xl flex-col items-center"
           >
-            <motion.h1
+            <m.h1
               variants={stagger(0.07)}
               className="max-w-3xl text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.12] tracking-[-0.03em] text-ink"
             >
               {HEADLINE_WORDS.map((word, i) => (
-                <motion.span
+                <m.span
                   key={`${word}-${i}`}
                   variants={blurWord}
                   className="mr-[0.25em] inline-block will-change-[transform,filter]"
                 >
                   {word}
-                </motion.span>
+                </m.span>
               ))}
-            </motion.h1>
+            </m.h1>
 
-            <motion.p
+            <m.p
               variants={rise}
               className="mt-4 max-w-xl text-base leading-[1.7] text-body"
             >
               From websites and applications to automation and AI, we create
               technology that makes your business simpler, smarter, and more
               scalable.
-            </motion.p>
+            </m.p>
 
-            <motion.div
+            <m.div
               variants={stagger(0.12)}
               className="mt-8 flex flex-wrap items-center justify-center gap-3"
             >
-              <motion.a
+              <m.a
                 variants={rise}
                 href="#kontak"
                 className="btn rounded-full bg-ink px-4 py-2 text-xs font-medium text-white hover:bg-brand"
               >
                 Start Project →
-              </motion.a>
-              <motion.a
+              </m.a>
+              <m.a
                 variants={rise}
                 href="#layanan"
                 className="btn rounded-full border border-line bg-surface px-4 py-2 text-xs font-medium text-ink hover:border-ink"
               >
                 Explore Our Services
-              </motion.a>
-            </motion.div>
-          </motion.div>
+              </m.a>
+            </m.div>
+          </m.div>
 
           {/* Top half of the composition with the bottom edge faded out (§22), so the
               devices settle into the section instead of ending on a hard line.
@@ -332,7 +337,7 @@ function Hero() {
               Deliberately slow: the image is the largest element on the page
               and a fast entrance reads as a jump cut once the headline has
               already settled. */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.7, ease: EASE, delay: 0.9 }}
@@ -340,7 +345,7 @@ function Hero() {
           >
             {/* Blue haze sits behind the composition and is clipped to the image's own
                 height (scale-x only) — nothing bleeds past the bottom edge. */}
-              <motion.div
+              <m.div
                 aria-hidden="true"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -354,11 +359,14 @@ function Hero() {
 
             <div className="relative z-10 overflow-hidden" style={{ aspectRatio: "1346 / 620" }}>
               <img
-                src="/herooo.png"
+                src="/herooo.webp"
                 alt="Tiga produk digital MITI: aplikasi kesehatan Carely, marketplace properti HomeSpace, dan point-of-sale MITI POS"
                 width={1346}
                 height={620}
                 draggable={false}
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
                 className="h-full w-full object-cover object-top select-none"
                 style={{
                   maskImage:
@@ -368,10 +376,10 @@ function Hero() {
                 }}
               />
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </MotionConfig>
-    </motion.section>
+    </m.section>
   );
 }
 
@@ -382,9 +390,12 @@ function Footer() {
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_auto] md:gap-16">
           <div>
             <img
-              src="/Logo.png"
+              src="/Logo.webp"
               alt="Markaz Information Technology International"
               className="h-12 w-auto"
+              loading="lazy"
+              width={192}
+              height={48}
             />
             {/* One line, per the brief — the `max-w-[16rem]` cap that used to
                 wrap it across three lines is what forced the ragged block. */}
@@ -478,22 +489,24 @@ function Footer() {
 
 export default function App() {
   return (
-    <SmoothScroll>
-      <div>
-        <Navbar />
+    <LazyMotion features={domAnimation} strict>
+      <SmoothScroll>
+        <div>
+          <Navbar />
 
-        <main id="top">
-          <Hero />
-          <Expertise />
-          <About />
-          <Services />
-          <Technology />
-          <Process />
-          <Contact />
-        </main>
+          <main id="top">
+            <Hero />
+            <Expertise />
+            <About />
+            <Services />
+            <Technology />
+            <Process />
+            <Contact />
+          </main>
 
-        <Footer />
-      </div>
-    </SmoothScroll>
+          <Footer />
+        </div>
+      </SmoothScroll>
+    </LazyMotion>
   );
 }

@@ -1,6 +1,6 @@
 import { Fragment, useRef } from "react";
 import {
-  motion,
+  m,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -143,6 +143,6 @@ function Unit({ text, index, to, tone, progress }) {
   const weight = useTransform(mix, [0, 1], [350, to]);
 
   return (
-    <motion.span style={{ color, opacity, fontWeight: weight }}>{text}</motion.span>
+    <m.span style={{ color, opacity, fontWeight: weight }}>{text}</m.span>
   );
 }

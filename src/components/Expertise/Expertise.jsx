@@ -6,7 +6,7 @@ import {
   Sparkles,
   Workflow,
 } from "lucide-react";
-import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { m, useReducedMotion, useScroll, useTransform } from "motion/react";
 
 /**
  * "Our Expertise" — a single looping capability strip.
@@ -60,7 +60,7 @@ export default function Expertise() {
         {/* Label and strip share one transform. Applying the parallax to the
             strip alone would drag it away from the label as you scroll, opening
             the gap from 22px to 112px. */}
-        <motion.div className="expertise__body" style={{ y }}>
+        <m.div className="expertise__body" style={{ y }}>
           <h2 className="expertise__label">Our Expertise</h2>
 
           <div className="strip">
@@ -69,7 +69,7 @@ export default function Expertise() {
               <Row hidden />
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

@@ -1,0 +1,133 @@
+# ============================================================
+#  .htaccess — DirectAdmin / Apache security & performance
+#  Markaz IT International — mitiofficial.com
+# ============================================================
+
+# ─── Security Headers ───────────────────────────────────────
+<IfModule mod_headers.c>
+  # Prevent clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+
+  # Prevent MIME-type sniffing
+  Header always set X-Content-Type-Options "nosniff"
+
+  # Enable XSS protection (legacy browsers)
+  Header always set X-XSS-Protection "1; mode=block"
+
+  # Referrer Policy — send origin only to same-site; no path leaked cross-site
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # Permissions Policy — disable unused powerful APIs
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), interest-cohort=()"
+
+  # Content Security Policy
+  # - script-src: 'self' only — no inline scripts in production build
+  # - style-src: 'unsafe-inline' needed for Tailwind + Motion runtime styles
+  # - img-src: Google Favicon API redirects to *.gstatic.com for hi-res icons
+  # - frame-ancestors 'none': clickjacking prevention
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.google.com https://*.gstatic.com https://*.googleusercontent.com https://static.vecteezy.com https://registry.npmmirror.com; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+
+  # HSTS — 1 year, include subdomains, preload
+  # SSL is confirmed working; safe to enable.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # Remove server fingerprint headers
+  Header always unset X-Powered-By
+  Header always unset Server
+  Header always unset X-AspNet-Version
+  Header always unset X-AspNetMvc-Version
+</IfModule>
+
+# ─── Force HTTPS ────────────────────────────────────────────
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Redirect HTTP → HTTPS
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Remove www (canonical: mitiofficial.com without www)
+  # Uncomment if you want non-www canonical:
+  # RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  # RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
+  # SPA fallback — send all non-file/non-dir requests to index.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# ─── Cache Control ──────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — short TTL so updates propagate quickly
+  ExpiresByType text/html                    "access plus 1 hour"
+
+  # Vite hashes JS/CSS filenames, so long-term cache is safe
+  ExpiresByType text/css                     "access plus 1 year"
+  ExpiresByType application/javascript       "access plus 1 year"
+  ExpiresByType text/javascript              "access plus 1 year"
+
+  # Images
+  ExpiresByType image/webp                   "access plus 1 year"
+  ExpiresByType image/png                    "access plus 1 year"
+  ExpiresByType image/jpeg                   "access plus 1 year"
+  ExpiresByType image/svg+xml               "access plus 1 year"
+  ExpiresByType image/x-icon                "access plus 1 year"
+
+  # Fonts
+  ExpiresByType font/woff2                   "access plus 1 year"
+  ExpiresByType font/woff                    "access plus 1 year"
+  ExpiresByType application/font-woff2       "access plus 1 year"
+
+  # JSON / sitemap
+  ExpiresByType application/json             "access plus 0 seconds"
+  ExpiresByType text/xml                     "access plus 1 hour"
+  ExpiresByType application/xml              "access plus 1 hour"
+</IfModule>
+
+# ─── Compression (gzip) ─────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
+  AddOutputFilterByType DEFLATE application/javascript text/javascript
+  AddOutputFilterByType DEFLATE application/json application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE font/woff font/woff2
+</IfModule>
+
+# ─── WebP Serving (auto-serve .webp if browser supports it) ─
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_ACCEPT} image/webp
+  RewriteCond %{REQUEST_FILENAME} \.(jpe?g|png)$
+  RewriteCond %{REQUEST_FILENAME}.webp -f
+  RewriteRule ^ %{REQUEST_URI}.webp [T=image/webp,L]
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpe?g|png|webp)$">
+    Header append Vary Accept
+  </FilesMatch>
+</IfModule>
+
+# ─── Block sensitive files ───────────────────────────────────
+<FilesMatch "(^\.env|\.git|package\.json|package-lock\.json|vite\.config\.|tailwind\.config\.)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# ─── Disable directory listing ───────────────────────────────
+Options -Indexes
+
+# ─── MIME Types ──────────────────────────────────────────────
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType application/json .json
+  AddType text/plain .txt
+  AddType text/markdown .md
+</IfModule>

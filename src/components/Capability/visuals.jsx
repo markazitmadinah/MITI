@@ -112,11 +112,12 @@ export function MitiCore() {
         <div className="core__body">
           <span className="core__inner" aria-hidden="true" />
           <img
-            src="/Logo.png"
+            src="/Logo.webp"
             alt="MITI"
             className="core__logo"
             width={148}
             height={64}
+            loading="lazy"
           />
           <p className="core__label">Digital Core</p>
         </div>

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://agenticresourcediscovery.org/schema/v1",
+  "schema_version": "1.0",
+  "name": "Markaz IT International",
+  "description": "PT Markaz Information Technology International (MITI) is an IT company in Jakarta, Indonesia that builds websites, mobile apps, e-commerce platforms, business automation, and AI solutions for modern businesses.",
+  "url": "https://mitiofficial.com",
+  "contact": {
+    "email": "info@markazit.co.id",
+    "phone": "+62817786805"
+  },
+  "capabilities": [
+    {
+      "name": "Web Development",
+      "description": "Modern, fast, responsive websites for businesses"
+    },
+    {
+      "name": "Mobile App Development",
+      "description": "Modern mobile applications designed around business needs"
+    },
+    {
+      "name": "WordPress Development",
+      "description": "Flexible and easy-to-manage WordPress websites"
+    },
+    {
+      "name": "E-Commerce Solution",
+      "description": "Online stores designed to turn visitors into customers"
+    },
+    {
+      "name": "Website Maintenance",
+      "description": "Website monitoring, updates, security, and maintenance"
+    },
+    {
+      "name": "Automation",
+      "description": "Automated workflows that reduce repetitive business tasks"
+    },
+    {
+      "name": "Video Editing",
+      "description": "Professional video editing for advertisements, reels, and digital content"
+    },
+    {
+      "name": "Social Media Design",
+      "description": "Visual content and social media designs that strengthen the brand"
+    }
+  ],
+  "links": {
+    "website": "https://mitiofficial.com",
+    "instagram": "https://www.instagram.com/markazinternational.it",
+    "tiktok": "https://www.tiktok.com/@mitiofficial",
+    "whatsapp": "https://wa.me/62817786805"
+  }
+}

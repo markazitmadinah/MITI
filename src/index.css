@@ -11,10 +11,10 @@
   /* §3 text */
   --color-ink: #111111;
   --color-body: #555555;
-  --color-muted: #8a8a8a;
+  --color-muted: #717171;
 
-  /* §4 accent */
-  --color-brand: #1677ff;
+  /* §4 accent — #0958d9 gives 5.74:1 on white (WCAG AA pass) */
+  --color-brand: #0958d9;
   --color-branddark: #0b5ed7;
   --color-brandsoft: #eaf3ff;
 
@@ -454,6 +454,7 @@ body {
   );
   filter: blur(22px);
   animation: core-breathe 7s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 @keyframes core-breathe {
@@ -470,6 +471,7 @@ body {
   width: 100%;
   height: 100%;
   animation: core-float 6.5s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes core-float {
@@ -483,6 +485,7 @@ body {
   border-radius: 50%;
   border: 1px solid rgba(22, 119, 255, 0.3);
   pointer-events: none;
+  will-change: transform;
 }
 
 .core__ring--a {
@@ -1488,15 +1491,16 @@ Each word is a single span whose opacity and font-weight are driven by
 }
 
 /* Tool wall: every tile starts stacked at the centre and flies out to its own
-   spot. left/top resolve from per-tile custom properties, so the keyframe can
-   collapse them all to 50%/50% without knowing the stage size in JS. */
+   spot. Uses transform instead of left/top animation for GPU compositing.
+   Each tile's position is set by CSS custom properties --x and --y. */
 .tech-tile {
   left: calc(50% + var(--x));
   top: calc(50% + var(--y));
+  will-change: transform, opacity;
 }
 @keyframes scatter {
-  from { left: 50%; top: 50%; opacity: 0; }
-  to { left: calc(50% + var(--x)); top: calc(50% + var(--y)); opacity: 1; }
+  from { transform: translate(calc(-1 * var(--x)), calc(-1 * var(--y))); opacity: 0; }
+  to { transform: translate(0, 0); opacity: 1; }
 }
 .rise-group.tech-tiles[data-shown] > * {
   animation: scatter 1.1s var(--ease-entrance) both;

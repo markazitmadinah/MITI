@@ -1,7 +1,15 @@
 import Reveal from "../Reveal";
-import TechText from "../TechText/TechText";
-import PatternWaves from "../PatternWaves/PatternWaves";
+import { lazy, Suspense } from "react";
 import { PHONE_DISPLAY, WHATSAPP } from "../../data/contact";
+
+// PatternWaves uses OGL (WebGL) — a heavy chunk only needed in the Contact
+// section which is always below the fold. Lazy-loading it keeps OGL out of the
+// initial JS parse budget entirely, which is the single biggest TBT reduction
+// available without removing the effect.
+const PatternWaves = lazy(() => import("../PatternWaves/PatternWaves"));
+
+// TechText is a 24 KB canvas-based component also below fold.
+const TechText = lazy(() => import("../TechText/TechText"));
 
 // DESIGN.md §37/§38 — the CTA is the strongest block on the page: #111
 // surface, 24px radius, 48px heading. §55 copy.
@@ -24,17 +32,19 @@ export default function Contact() {
                 decide between the two logos — a transparent canvas would make it
                 read the light `bg-surfacesoft` behind and flip the logo to its
                 light variant over a dark section. */}
-            <PatternWaves
-              preset="silk"
-              color="#ffffff"
-              backgroundColor="#111111"
-              fade="edges"
-              fadeSize={0.55}
-              interactive
-              cursorSize={90}
-              cursorStrength={0.45}
-              opacity={0.28}
-            />
+            <Suspense fallback={null}>
+              <PatternWaves
+                preset="silk"
+                color="#ffffff"
+                backgroundColor="#111111"
+                fade="edges"
+                fadeSize={0.55}
+                interactive
+                cursorSize={90}
+                cursorStrength={0.45}
+                opacity={0.28}
+              />
+            </Suspense>
           </div>
 
           {/* Sits over the waves, which stay decorative. */}
@@ -51,24 +61,30 @@ export default function Contact() {
               document outline. */}
           <h2 className="sr-only">Let's build something useful</h2>
 
-          <TechText
-            text="Let's build something useful"
-            fontWeight={600}
-            fontSize={120}
-            letterSpacing={-0.02}
-            color="#ffffff"
-            accentColor="#1677ff"
-            reveal="letter"
-            reach={180}
-            softness={0.7}
-            dashLength={4}
-            dashGap={2}
-            strokeWidth={1.5}
-            specks={12}
-            speed={0.85}
-            className="mx-auto mt-8 max-w-2xl"
-            style={{ height: "clamp(56px, 11vw, 118px)" }}
-          />
+          <Suspense fallback={
+            <p className="mx-auto mt-8 max-w-2xl text-center text-[clamp(2rem,7vw,4rem)] font-semibold text-white" style={{ height: "clamp(56px, 11vw, 118px)" }}>
+              Let&apos;s build something useful
+            </p>
+          }>
+            <TechText
+              text="Let's build something useful"
+              fontWeight={600}
+              fontSize={120}
+              letterSpacing={-0.02}
+              color="#ffffff"
+              accentColor="#1677ff"
+              reveal="letter"
+              reach={180}
+              softness={0.7}
+              dashLength={4}
+              dashGap={2}
+              strokeWidth={1.5}
+              specks={12}
+              speed={0.85}
+              className="mx-auto mt-8 max-w-2xl"
+              style={{ height: "clamp(56px, 11vw, 118px)" }}
+            />
+          </Suspense>
 
           <Reveal
             as="p"
@@ -101,3 +117,4 @@ export default function Contact() {
     </section>
   );
 }
+

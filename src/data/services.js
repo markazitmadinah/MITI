@@ -16,7 +16,7 @@ export const SERVICES = [
     icon: Globe,
     name: "Web Development",
     desc: "Modern, fast, responsive websites for businesses",
-    image: "/Web_Card.png",
+    image: "/Web_Card.webp",
   },
   {
     id: "mobile",
@@ -24,7 +24,7 @@ export const SERVICES = [
     icon: Smartphone,
     name: "Mobile App Development",
     desc: "Modern mobile applications designed around business needs",
-    image: "/Android_card.png",
+    image: "/Android_card.webp",
   },
   {
     id: "wordpress",
@@ -32,7 +32,7 @@ export const SERVICES = [
     icon: LayoutPanelLeft,
     name: "WordPress Development",
     desc: "Flexible and easy-to-manage WordPress websites",
-    image: "/wordpress_card.png",
+    image: "/wordpress_card.webp",
   },
   {
     id: "ecommerce",
@@ -40,7 +40,7 @@ export const SERVICES = [
     icon: ShoppingCart,
     name: "E-Commerce Solution",
     desc: "Online stores designed to turn visitors into customers",
-    image: "/Ecommerce_card.png",
+    image: "/Ecommerce_card.webp",
   },
   {
     id: "maintenance",
@@ -48,7 +48,7 @@ export const SERVICES = [
     icon: Wrench,
     name: "Website Maintenance",
     desc: "Website monitoring, updates, security, and maintenance",
-    image: "/maintenance_card.png",
+    image: "/maintenance_card.webp",
   },
   {
     id: "automation",
@@ -56,7 +56,7 @@ export const SERVICES = [
     icon: Bot,
     name: "Automation",
     desc: "Automated workflows that reduce repetitive business tasks",
-    image: "/Automation_card.png",
+    image: "/Automation_card.webp",
   },
   {
     id: "video",
@@ -64,7 +64,7 @@ export const SERVICES = [
     icon: Video,
     name: "Video Editing",
     desc: "Professional video editing for advertisements, reels, and digital content",
-    image: "/Videoeditor_card.png",
+    image: "/Videoeditor_card.webp",
   },
   {
     id: "social",
@@ -72,6 +72,6 @@ export const SERVICES = [
     icon: Share2,
     name: "Social Media Design",
     desc: "Visual content and social media designs that strengthen the brand",
-    image: "/Socialmedia_card.png",
+    image: "/Socialmedia_card.webp",
   },
 ];
